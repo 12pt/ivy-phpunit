@@ -67,20 +67,21 @@
     funcs))
 
 (defun ivy-phpunit-test-func (func-name &optional filename)
-  "Test a single test by its name.
-If non-nil, use FILENAME as the name of the file the test class/functionName exists in."
+  "Run a test given its name via FUNC-NAME.
+If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists in."
   (let* ((filename (or filename buffer-file-name))
          (args (s-concat
-                filename 
+                filename
                 " --filter '" (phpunit-get-current-class) "::" func-name "'"))) ; select the test
     (phpunit-run args)))
 
 ;;-----------------------------------------------------------------------------------------------
 
 (defun ivy-phpunit-list-test-classes ()
+  "Find all the test classes in this directory.
+If called interactively, allow the user to quick-switch via ivy to the class.
+If not, just return a list of classes."
   (interactive)
-  "Find all the test classes in this directory. If called interactively, allow the user
-to quick-switch via ivy to the class. If not, just return a list of classes."
   (let ((tests
          (directory-files default-directory nil ivy-phpunit-test-regex)))
     (if (called-interactively-p 'any)
@@ -91,16 +92,16 @@ to quick-switch via ivy to the class. If not, just return a list of classes."
       tests)))
 
 (defun ivy-phpunit-test-class ()
+  "Find all test classes in the current directory and enable the user to test it."
   (interactive)
-  "Find all test classes in the current directory and enable the user to run tests on one."
   (ivy-read "Class to test: " (ivy-phpunit-list-test-classes)
             :sort t
             :caller 'ivy-phpunit-test-class
             :action (lambda (x) (phpunit-run (file-truename x)))))
 
 (defun ivy-phpunit-test-function ()
-  (interactive)
   "Find all the test functions in the buffer and allow user to select one to test."
+  (interactive)
   (ivy-read "Function to test: " (ivy-phpunit-find-funcs)
             :sort t
             :caller 'ivy-phpunit-select-test
