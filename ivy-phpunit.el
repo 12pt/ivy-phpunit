@@ -25,13 +25,14 @@
 ;;; Commentary:
 
 ;; You should always be able to find the latest version here at <URL:https://github.com/12pt/ivy-phpunit.el/>
-;; At the moment this is mostly a port of helm-phpunit to ivy, though more features are planned.
+;; This project is inspired by helm-phpunit but also provides additional utility such as selecting classes to test,
+;; and allowing for fast swapping between test classes with ivy-phpunit-list-test-classes.
 
 ;; Usage:
 
 ;; Require the package:
 ;; (require 'ivy-phpunit)
-;; And then call ivy-phpunit-select-test - you'll probably want to assign it to a key combo.
+;; And then call either ivy-phpunit-test-function, ivy-phpunit-list-test-classes, or ivy-phpunit-test-class
 
 (require 'phpunit)
 (require 'ivy)
@@ -97,7 +98,7 @@ to quick-switch via ivy to the class. If not, just return a list of classes."
 
 (defun ivy-phpunit-test-function ()
   (interactive)
-  "Find all the test functions in the buffer."
+  "Find all the test functions in the buffer and allow user to select one to test."
   (ivy-read "Function to test: " (ivy-phpunit-find-funcs)
             :sort t
             :caller 'ivy-phpunit-select-test

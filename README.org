@@ -1,6 +1,6 @@
 * ivy-phpunit
 
-Quick-select your PHP functions in your PHPUnit test classes. Currently it's basically an ivy-clone of helm-phpunit, but more functionality will be added.
+Quick-select your PHP functions in your PHPUnit test classes. This builds off =helm-phpunit='s test function selecting but also provides additional utility.
 
 ** Usage
 
@@ -8,10 +8,14 @@ Bind =ivy-phpunit-select-test= to a keybinding and then call from within your te
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'php-mode-hook (lambda ()
-                           (local-set-key (kbd "C-x t") 'ivy-phpunit-select-test)))
+                           (local-set-key (kbd "C-x t") 'ivy-phpunit-test-function)
+                           (local-set-key (kbd "C-x c") 'ivy-phpunit-test-class)
+                           (local-set-key (kbd "C-x C") 'ivy-phpunit-list-test-classes)))
 #+END_SRC
 
 ** Customize
+
+*** Ignored test functions
 
 Currently you can select or deselect test functions to not be listed in the prompt - default is to not list =setUp= and =tearDown=.
 
@@ -22,6 +26,14 @@ Changing this outside of =M-x customize= is as simple as:
 #+END_SRC
 
 Obviously to ignore nothing, pass an empty list.
+
+*** Test file regexp
+
+You can also specify a test file regexp similar to that specified in =phpunit.xml=. In the future the package will attempt to read this file but for now one can set it in =M-x customize= or:
+
+#+BEGIN_SRC emacs-lisp
+(setq ivy-phpunit-test-regex ".php$") ; ANY php file is a test
+#+END_SRC
 
 ** Credit
 
