@@ -1,11 +1,11 @@
-;; ivy-phpunit.el --- Ivy integration for phpunit.el
+;;; ivy-phpunit.el --- Ivy integration for phpunit.el
 
 ;; Copyright (C) 2018, 12pt
 
 ;; Author: 12pt
 ;; URL: https://github.com/12pt/ivy-phpunit.el
 ;; Version: 0.0.1
-;; Keywords: ivy phpunit php
+;; Keywords: convenience tools ivy phpunit php
 
 ;; This file is not part of GNU Emacs.
 
@@ -33,6 +33,8 @@
 ;; Require the package:
 ;; (require 'ivy-phpunit)
 ;; And then call either ivy-phpunit-test-function, ivy-phpunit-list-test-classes, or ivy-phpunit-test-class
+
+;;; Code:
 
 (require 'phpunit)
 (require 'ivy)
