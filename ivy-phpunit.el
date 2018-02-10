@@ -3,7 +3,7 @@
 ;; Copyright (C) 2018, 12pt
 
 ;; Author: 12pt
-;; URL: https://github.com/12pt/ivy-phpunit.el
+;; URL: https://github.com/12pt/ivy-phpunit
 ;; Version: 0.0.1
 ;; Keywords: convenience tools ivy phpunit php
 ;; Package-Requires: ((ivy "0.10.0") (phpunit "0.7.0"))
