@@ -46,6 +46,13 @@
   :options '("setUpBeforeClass" "tearDownAfterClass")
   :group 'ivy-phpunit)
 
+;; in the future maybe we'll check for a phpunit.xml file and get the config there.
+(defcustom ivy-phpunit-test-regex "Test.php$"
+  "What filenames must match for ivy-phpunit to consider them a test class."
+  :type 'string
+  :options '(".php$")
+  :group 'ivy-phpunit)
+
 (defun ivy-phpunit-find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
   (let (funcs '())
@@ -65,7 +72,30 @@ If non-nil, use FILENAME as the name of the file the test class/functionName exi
                 " --filter '" (phpunit-get-current-class) "::" func-name "'"))) ; select the test
     (phpunit-run args)))
 
-(defun ivy-phpunit-select-test ()
+;;-----------------------------------------------------------------------------------------------
+
+(defun ivy-phpunit-list-test-classes ()
+  (interactive)
+  "Find all the test classes in this directory. If called interactively, allow the user
+to quick-switch via ivy to the class. If not, just return a list of classes."
+  (let ((tests
+         (directory-files default-directory nil ivy-phpunit-test-regex)))
+    (if (called-interactively-p 'any)
+        (ivy-read "Select a class: " tests
+                  :sort t
+                  :caller 'ivy-phpunit-list-test-classes
+                  :action (lambda (file) (find-file file)))
+      tests)))
+
+(defun ivy-phpunit-test-class ()
+  (interactive)
+  "Find all test classes in the current directory and enable the user to run tests on one."
+  (ivy-read "Class to test: " (ivy-phpunit-list-test-classes)
+            :sort t
+            :caller 'ivy-phpunit-test-class
+            :action (lambda (x) (phpunit-run (file-truename x)))))
+
+(defun ivy-phpunit-test-function ()
   (interactive)
   "Find all the test functions in the buffer."
   (ivy-read "Function to test: " (ivy-phpunit-find-funcs)
