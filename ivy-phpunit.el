@@ -61,7 +61,7 @@
   "Find all the PHP function names in the current buffer and insert them into a list."
   (let (funcs '())
     (save-excursion
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (while (search-forward-regexp php-beginning-of-defun-regexp nil t)
         (unless (member (match-string-no-properties 1) ivy-phpunit-ignorelist)
           (add-to-list 'funcs (match-string-no-properties 1)))))
