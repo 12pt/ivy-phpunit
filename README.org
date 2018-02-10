@@ -1,0 +1,29 @@
+* ivy-phpunit
+
+Quick-select your PHP functions in your PHPUnit test classes. Currently it's basically an ivy-clone of helm-phpunit, but more functionality will be added.
+
+** Usage
+
+Bind =ivy-phpunit-select-test= to a keybinding and then call from within your test class. Select a method to pass to PHPUnit and presto - your test will be run.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'php-mode-hook (lambda ()
+                           (local-set-key (kbd "C-x t") 'ivy-phpunit-select-test)))
+#+END_SRC
+
+** Customize
+
+Currently you can select or deselect test functions to not be listed in the prompt - default is to not list =setUp= and =tearDown=.
+
+Changing this outside of =M-x customize= is as simple as:
+
+#+BEGIN_SRC emacs-lisp
+(setq ivy-phpunit-ignorelist '("myIgnoredFunction"))
+#+END_SRC
+
+Obviously to ignore nothing, pass an empty list.
+
+** Credit
+
++ =abo-abo= - [[https://github.com/abo-abo/swiper][ivy/swiper]]
++ =eric-hansen= - [[https://github.com/eric-hansen/helm-phpunit][helm-phpunit]]
