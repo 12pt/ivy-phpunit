@@ -82,7 +82,7 @@ to quick-switch via ivy to the class. If not, just return a list of classes."
   (let ((tests
          (directory-files default-directory nil ivy-phpunit-test-regex)))
     (if (called-interactively-p 'any)
-        (ivy-read "Select a class: " tests
+        (ivy-read "View a test: " tests
                   :sort t
                   :caller 'ivy-phpunit-list-test-classes
                   :action (lambda (file) (find-file file)))
