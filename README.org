@@ -29,7 +29,7 @@ Obviously to ignore nothing, pass an empty list.
 
 *** Test file regexp
 
-You can also specify a test file regexp similar to that specified in =phpunit.xml=. In the future the package will attempt to read this file but for now one can set it in =M-x customize= or:
+You can also specify a test file regexp similar to that specified in =phpunit.xml=. The default is =Test.php$= - test files with names ending in =Test.php=. In the future the package will attempt to read this file but for now one can set it in =M-x customize= or:
 
 #+BEGIN_SRC emacs-lisp
 (setq ivy-phpunit-test-regex ".php$") ; ANY php file is a test
