@@ -116,7 +116,7 @@ If not, just return a list of classes."
   (ivy-read "Class to test: " (ivy-phpunit--filter-classes (ivy-phpunit-list-test-classes))
             :sort t
             :caller 'ivy-phpunit-test-class
-            :action (lambda (classname) (phpunit-run (s-concat "--filter '" classname "'"))))) ; this shouldnt actually have a problem
+            :action (lambda (classname) (phpunit-run (s-concat "--filter '" classname "'")))))
 
 (defun ivy-phpunit-test-function ()
   "Find all the test functions in the current buffer and allow user to select one to test."
@@ -125,8 +125,6 @@ If not, just return a list of classes."
             :sort t
             :caller 'ivy-phpunit-select-test
             :action (lambda (x) (ivy-phpunit--test-func x))))
-
-;; TODO make alternative test function by selecing class then function.
 
 (provide 'ivy-phpunit)
 
