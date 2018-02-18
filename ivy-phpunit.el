@@ -49,7 +49,7 @@
   "^ - \\(?1:[[:word:]]+\\)::\\(?2:[[:word:]]+\\)$"
   "Regular expression for PHPUnit's response to --list-tests")
 
-(defun ivy-phpunit-find-funcs ()
+(defun ivy-phpunit--find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
   (let (funcs '())
     (save-excursion
@@ -59,7 +59,7 @@
           (add-to-list 'funcs (match-string-no-properties 1)))))
     funcs))
 
-(defun ivy-phpunit-test-func (func-name &optional filename)
+(defun ivy-phpunit--test-func (func-name &optional filename)
   "Run a test given its name via FUNC-NAME.
 If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists in."
   (let* ((filename (or filename buffer-file-name))
@@ -120,10 +120,10 @@ If not, just return a list of classes."
 (defun ivy-phpunit-test-function ()
   "Find all the test functions in the current buffer and allow user to select one to test."
   (interactive)
-  (ivy-read "Function to test: " (ivy-phpunit-find-funcs)
+  (ivy-read "Function to test: " (ivy-phpunit--find-funcs)
             :sort t
             :caller 'ivy-phpunit-select-test
-            :action (lambda (x) (ivy-phpunit-test-func x))))
+            :action (lambda (x) (ivy-phpunit--test-func x))))
 
 ;; TODO make alternative test function by selecing class then function.
 
