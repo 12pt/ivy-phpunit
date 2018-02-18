@@ -49,7 +49,7 @@
 (defcustom ivy-phpunit-test-regex "Test.php\\'"
   "What filenames must match for ivy-phpunit to consider them a test class."
   :type 'string
-  :options '(".php$")
+  :options '(".php\\'")
   :group 'ivy-phpunit)
 
 (defun ivy-phpunit-find-funcs ()
