@@ -6,7 +6,7 @@
 ;; URL: https://github.com/12pt/ivy-phpunit
 ;; Version: 0.0.1
 ;; Keywords: convenience tools ivy phpunit php
-;; Package-Requires: ((ivy "0.10.0") (phpunit "0.7.0"))
+;; Package-Requires: ((ivy "0.10.0") (phpunit "0.7.0") (emacs "25"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -47,7 +47,7 @@
 
 (defconst ivy-phpunit-list-tests
   "^ - \\(?1:[[:word:]]+\\)::\\(?2:[[:word:]]+\\)$"
-  "Regular expression for PHPUnit's response to --list-tests")
+  "Regular expression for PHPUnit's response to --list-tests.".)
 
 (defun ivy-phpunit--find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
@@ -69,7 +69,8 @@ If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists
     (phpunit-run args)))
 
 (defun ivy-phpunit--parse-tests (output)
-  "Find all tests in the current project. Returns a list of (classname . testname)"
+  "Split the string OUTPUT into a list of (classname . testname).
+Expecting OUTPUT to be the result of running phpunit --list-tests."
   (let ((pos 0)
         matches)
     (while (string-match ivy-phpunit-list-tests output pos)
@@ -79,17 +80,17 @@ If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists
       (setq pos (match-end 0)))
     matches))
 
-(defun ivy-phpunit--filter-classes (output)
-  "Convert the parse-tests list of pairs to a flat list of just the classes."
-  (delete-dups (mapcar 'car output)))
+(defun ivy-phpunit--filter-classes (test-names)
+  "Convert the TEST-NAMES list of (class . function) to a flat list of just the classes."
+  (delete-dups (mapcar 'car test-names)))
 
-(defun ivy-phpunit--filter-functions (output)
-  "Conver the parse-tests list of pairs to a flat list of just the functions."
-  (delete-dups (mapcar 'cdr output)))
+(defun ivy-phpunit--filter-functions (test-names)
+  "Conver the TEST-NAMES list of (class . function) to a flat list of just the functions."
+  (delete-dups (mapcar 'cdr test-names)))
 
 (defun ivy-phpunit--class-to-file-path (classname)
   "Attempt to get the source file for the given test.
-We do this by recursively searching from the project root for files matching the classname, and picking the first one."
+We do this by recursively searching from the project root for files matching the CLASSNAME, and picking the first one."
   (let ((project-root (phpunit-get-root-directory)))
     (car (directory-files-recursively project-root (s-concat classname ".php")))))
 
@@ -112,7 +113,7 @@ If not, just return a list of classes."
 (defun ivy-phpunit-test-class ()
   "Find all test classes in the current project and enable the user to test it."
   (interactive)
-  (ivy-read "Class to test: " (ivy-phpunit--filter-classes (ivy-phpunit-list-test-classes)) 
+  (ivy-read "Class to test: " (ivy-phpunit--filter-classes (ivy-phpunit-list-test-classes))
             :sort t
             :caller 'ivy-phpunit-test-class
             :action (lambda (classname) (phpunit-run (s-concat "--filter '" classname "'"))))) ; this shouldnt actually have a problem
