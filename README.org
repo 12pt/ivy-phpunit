@@ -13,8 +13,9 @@ Bind =ivy-phpunit-select-test= to a keybinding and then call from within your te
                            (local-set-key (kbd "C-x C") 'ivy-phpunit-list-test-classes)))
 #+END_SRC
 
-** Customize
+='ivy-phpunit-test-class= and ='ivy-phpunit-list-test-classes= can be called anywhere in the current PHP project; for now ='ivy-phpunit-test-function= is just for running tests in the current buffer (i.e. a test you're editing).
 
+** Customize
 *** Ignored test functions
 
 Currently you can select or deselect test functions to not be listed in the prompt - default is to not list =setUp= and =tearDown=.
@@ -26,14 +27,6 @@ Changing this outside of =M-x customize= is as simple as:
 #+END_SRC
 
 Obviously to ignore nothing, pass an empty list.
-
-*** Test file regexp
-
-You can also specify a test file regexp similar to that specified in =phpunit.xml=. The default is =Test.php$= - test files with names ending in =Test.php=. In the future the package will attempt to read this file but for now one can set it in =M-x customize= or:
-
-#+BEGIN_SRC emacs-lisp
-(setq ivy-phpunit-test-regex ".php$") ; ANY php file is a test
-#+END_SRC
 
 ** Credit
 
