@@ -45,12 +45,9 @@
   :options '("setUpBeforeClass" "tearDownAfterClass")
   :group 'ivy-phpunit)
 
-;; in the future maybe we'll check for a phpunit.xml file and get the config there.
-(defcustom ivy-phpunit-test-regex "Test.php\\'"
-  "What filenames must match for ivy-phpunit to consider them a test class."
-  :type 'string
-  :options '(".php\\'")
-  :group 'ivy-phpunit)
+(defconst ivy-phpunit-list-tests
+  "^ - \\(?1:[[:word:]]+\\)::\\(?2:[[:word:]]+\\)$"
+  "Regular expression for PHPUnit's response to --list-tests")
 
 (defun ivy-phpunit-find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
@@ -71,29 +68,54 @@ If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists
                 " --filter '" (phpunit-get-current-class) "::" func-name "'"))) ; select the test
     (phpunit-run args)))
 
+(defun ivy-phpunit--parse-tests (output)
+  "Find all tests in the current project. Returns a list of (classname . testname)"
+  (let ((pos 0)
+        matches)
+    (while (string-match ivy-phpunit-list-tests output pos)
+      (push
+       (list (match-string-no-properties 1 output) (match-string-no-properties 2 output))
+       matches)
+      (setq pos (match-end 0)))
+    matches))
+
+(defun ivy-phpunit--filter-classes (output)
+  "Convert the parse-tests list of pairs to a flat list of just the classes."
+  (delete-dups (mapcar 'car output)))
+
+(defun ivy-phpunit--filter-functions (output)
+  "Conver the parse-tests list of pairs to a flat list of just the functions."
+  (delete-dups (mapcar 'cdr output)))
+
+(defun ivy-phpunit--class-to-file-path (classname)
+  "Attempt to get the source file for the given test.
+We do this by recursively searching from the project root for files matching the classname, and picking the first one."
+  (let ((project-root (phpunit-get-root-directory)))
+    (car (directory-files-recursively project-root (s-concat classname ".php")))))
+
 ;;-----------------------------------------------------------------------------------------------
 
 (defun ivy-phpunit-list-test-classes ()
-  "Find all the test classes in this directory.
+  "Find all the test classes in this project.
 If called interactively, allow the user to quick-switch via ivy to the class.
 If not, just return a list of classes."
   (interactive)
-  (let ((tests
-         (directory-files default-directory nil ivy-phpunit-test-regex)))
+  (let* ((output (phpunit--execute "--list-tests"))
+        (tests (ivy-phpunit--parse-tests output)))
     (if (called-interactively-p 'any)
-        (ivy-read "View a test: " tests
+        (ivy-read "Edit a test: " (ivy-phpunit--filter-classes tests)
                   :sort t
                   :caller 'ivy-phpunit-list-test-classes
-                  :action (lambda (file) (find-file file)))
+                  :action (lambda (classname) (find-file (ivy-phpunit--class-to-file-path classname))))
       tests)))
 
 (defun ivy-phpunit-test-class ()
-  "Find all test classes in the current directory and enable the user to test it."
+  "Find all test classes in the current project and enable the user to test it."
   (interactive)
-  (ivy-read "Class to test: " (ivy-phpunit-list-test-classes)
+  (ivy-read "Class to test: " (ivy-phpunit--filter-classes (ivy-phpunit-list-test-classes)) 
             :sort t
             :caller 'ivy-phpunit-test-class
-            :action (lambda (x) (phpunit-run (file-truename x)))))
+            :action (lambda (classname) (phpunit-run (s-concat "--filter '" classname "'"))))) ; this shouldnt actually have a problem
 
 (defun ivy-phpunit-test-function ()
   "Find all the test functions in the buffer and allow user to select one to test."
@@ -102,6 +124,8 @@ If not, just return a list of classes."
             :sort t
             :caller 'ivy-phpunit-select-test
             :action (lambda (x) (ivy-phpunit-test-func x))))
+
+;; TODO make alternative test function by selecing class then function.
 
 (provide 'ivy-phpunit)
 
