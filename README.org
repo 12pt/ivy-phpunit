@@ -13,7 +13,7 @@ Bind =ivy-phpunit-select-test= to a keybinding and then call from within your te
                            (local-set-key (kbd "C-x C") 'ivy-phpunit-list-test-classes)))
 #+END_SRC
 
-='ivy-phpunit-test-class= and ='ivy-phpunit-list-test-classes= can be called anywhere in the current PHP project; for now ='ivy-phpunit-test-function= is just for running tests in the current buffer (i.e. a test you're editing).
+=ivy-phpunit-test-class= and =ivy-phpunit-list-test-classes= can be called anywhere in the current PHP project; for now =ivy-phpunit-test-function= is just for running tests in the current buffer (i.e. a test you're editing).
 
 ** Customize
 *** Ignored test functions
