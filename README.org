@@ -32,3 +32,6 @@ Obviously to ignore nothing, pass an empty list.
 
 + =abo-abo= - [[https://github.com/abo-abo/swiper][ivy/swiper]]
 + =eric-hansen= - [[https://github.com/eric-hansen/helm-phpunit][helm-phpunit]]
++ =nlamirault= - [[https://github.com/nlamirault/phpunit.el][phpunit.el]]
+
+And obviously [[https://phpunit.de][PHPUnit]].
