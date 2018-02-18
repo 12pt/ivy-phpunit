@@ -46,7 +46,7 @@
   :group 'ivy-phpunit)
 
 ;; in the future maybe we'll check for a phpunit.xml file and get the config there.
-(defcustom ivy-phpunit-test-regex "Test.php$"
+(defcustom ivy-phpunit-test-regex "Test.php\\'"
   "What filenames must match for ivy-phpunit to consider them a test class."
   :type 'string
   :options '(".php$")
@@ -67,7 +67,7 @@
 If non-nil, use FILENAME as the name of the file the test class/FUNC-NAME exists in."
   (let* ((filename (or filename buffer-file-name))
          (args (s-concat
-                filename
+                (shell-quote-argument filename)
                 " --filter '" (phpunit-get-current-class) "::" func-name "'"))) ; select the test
     (phpunit-run args)))
 
