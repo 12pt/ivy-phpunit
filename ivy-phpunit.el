@@ -85,7 +85,7 @@ Expecting OUTPUT to be the result of running phpunit --list-tests."
   (delete-dups (mapcar 'car test-names)))
 
 (defun ivy-phpunit--filter-functions (test-names)
-  "Conver the TEST-NAMES list of (class . function) to a flat list of just the functions."
+  "Convert the TEST-NAMES list of (class . function) to a flat list of just the functions."
   (delete-dups (mapcar 'cdr test-names)))
 
 (defun ivy-phpunit--class-to-file-path (classname)
