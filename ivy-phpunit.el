@@ -47,7 +47,7 @@
 
 (defconst ivy-phpunit-list-tests
   "^ - \\(?1:[[:word:]]+\\)::\\(?2:[[:word:]]+\\)$"
-  "Regular expression for PHPUnit's response to --list-tests.".)
+  "Regular expression for PHPUnit's response to --list-tests.")
 
 (defun ivy-phpunit--find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
