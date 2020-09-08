@@ -6,7 +6,7 @@
 ;; URL: https://github.com/12pt/ivy-phpunit
 ;; Version: 0.0.1
 ;; Keywords: convenience tools ivy phpunit php
-;; Package-Requires: ((ivy "0.10.0") (phpunit "0.7.0") (emacs "25"))
+;; Package-Requires: ((emacs "25.1") (ivy "0.10.0") (phpunit "0.7.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -47,7 +47,7 @@
 
 (defconst ivy-phpunit-list-tests
   "^ - \\(?1:[[:word:]]+\\)::\\(?2:[[:word:]]+\\)$"
-  "Regular expression for PHPUnit's response to --list-tests.".)
+  "Regular expression for PHPUnit's response to --list-tests.")
 
 (defun ivy-phpunit--find-funcs ()
   "Find all the PHP function names in the current buffer and insert them into a list."
@@ -102,7 +102,7 @@ If called interactively, allow the user to quick-switch via ivy to the class.
 If not, just return a list of classes."
   (interactive)
   (let* ((output (phpunit--execute "--list-tests"))
-        (tests (ivy-phpunit--parse-tests output)))
+         (tests (ivy-phpunit--parse-tests output)))
     (if (called-interactively-p 'any)
         (ivy-read "Edit a test: " (ivy-phpunit--filter-classes tests)
                   :sort t
