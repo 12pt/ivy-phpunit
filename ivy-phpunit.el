@@ -102,7 +102,7 @@ If called interactively, allow the user to quick-switch via ivy to the class.
 If not, just return a list of classes."
   (interactive)
   (let* ((output (phpunit--execute "--list-tests"))
-        (tests (ivy-phpunit--parse-tests output)))
+         (tests (ivy-phpunit--parse-tests output)))
     (if (called-interactively-p 'any)
         (ivy-read "Edit a test: " (ivy-phpunit--filter-classes tests)
                   :sort t
