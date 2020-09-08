@@ -6,7 +6,7 @@
 ;; URL: https://github.com/12pt/ivy-phpunit
 ;; Version: 0.0.1
 ;; Keywords: convenience tools ivy phpunit php
-;; Package-Requires: ((ivy "0.10.0") (phpunit "0.7.0") (emacs "25"))
+;; Package-Requires: ((emacs "25.1") (ivy "0.10.0") (phpunit "0.7.0"))
 
 ;; This file is not part of GNU Emacs.
 
